@@ -30,9 +30,29 @@ async function run() {
     const productCollection = client.db('car-doctor').collection('products');
 
     app.get('/products', async (req, res) => {
-      const result = await productCollection.find().toArray();
+      // console.log(req.body)
+      const page=parseInt(req.query.page);
+      const limit=parseInt(req.query.limit);
+      // const skip=page*limit;
+
+      const result = await productCollection.find()
+      .skip(page*limit)
+      .limit(limit)
+      .toArray();
       res.send(result);
     })
+
+    // app.get('/products', async (req, res) => {
+    //   const page = parseInt(req.query.page);
+    //   const size = parseInt(req.query.size);
+
+    //   console.log('pagination query', page, size);
+    //   const result = await productCollection.find()
+    //   .skip(page * size)
+    //   .limit(size)
+    //   .toArray();
+    //   res.send(result);
+    // })
 
 
     app.get('/totalproducts',async(req,res)=>{
